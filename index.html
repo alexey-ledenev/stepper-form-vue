@@ -14,18 +14,187 @@
 </head>
 <body>
   <div id="app">
-      <v-app>
-        <v-content>
-          <v-container>Hello world</v-container>
-        </v-content>
-      </v-app>
-    </div>
+    <v-app>
+      <v-content>
+        <v-container>
+          <v-form
+            ref="form"
+            v-model="form"
+            py-1
+          >
+          <v-stepper v-model="nowStep">
+            <v-stepper-header>
+              <v-stepper-step :complete="nowStep > 1" step="1">Шаг 1</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 2" step="2">Шаг 2</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 3" step="3">Шаг 3</v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 4" step="4">Шаг 4</v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 5" step="5">Шаг 5</v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 6" step="6">Шаг 6</v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="nowStep > 7" step="7">Финиш</v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-layout row wrap space-between class="white black--text">
+                  <v-flex xs12>
+                    <p class="headline">Укажите основные характеристики планируемого объекта:</p>
+                  </v-flex>
+                  <v-flex xs12><v-textarea counter="500" validate-on-blur auto-grow flat label="Назначение объекта" hint="Производственное, непроизводственное (общественное здание, жилое здание)"></v-textarea></v-flex>
+                  <v-flex xs6 pr-2><v-text-field hint="кв. м" label="Площадь застройки"></v-text-field></v-flex>
+                  <v-flex xs6 pl-2><v-text-field hint="кв. м" label="Общая площадь объекта"></v-text-field></v-flex>
+                  <v-flex xs12><v-text-field hint="тыс. руб." label="Сумма планируемых инвестиций"></v-text-field></v-flex>
+                  <v-flex xs12><v-textarea counter="10000" validate-on-blur auto-grow flat label="Необходимые мощности" hint="Необходимые для эксплуатации объекта мощности по газоснабжению, электроснабжению и водопотреблению"></v-textarea></v-flex>
+                </v-layout>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+              </v-stepper-content>
+              <v-stepper-content step="4">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+              </v-stepper-content>
+              <v-stepper-content step="5">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+              </v-stepper-content>
+              <v-stepper-content step="6">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+              </v-stepper-content>
+              <v-stepper-content step="7">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                >ваши коордиаты</v-card>
+              </v-stepper-content>
+            </v-stepper-items>
+
+            <div class="py-3 text-xs-right">
+                <v-btn
+                  color="primary"
+                  @click="nextStep"
+                  v-if="nowStep<7"
+                >
+                  Далее
+                </v-btn>
+                <v-btn
+                  color="red"
+                  @click="nextStep"
+                  v-else
+                  dark
+                >
+                  Отправить
+                </v-btn>
+
+                <v-btn v-if="nowStep>1" @click="prevStep">Назад</v-btn>
+            </div>
+          </v-stepper>
+             <v-dialog
+      v-model="dialog"
+      absolute
+      max-width="400"
+      persistent
+    >
+          </v-form>
+        </v-container>
+      </v-content>
+    </v-app>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/vue-upload-component"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
   <script>
-    new Vue({ el: '#app' })
+    Vue.use(Vuetify)
+    Vue.component('file-upload', VueUploadComponent)
+    const App = new Vue({ 
+      el: '#app',
+      data(){
+        return {
+          form: false,
+          isLoading: false,
+          nowStep: 1,
+          dialog: false,
+          files: []
+        }
+      },
+      components: {
+        FileUpload: VueUploadComponent
+      },
+      methods: {
+        nextStep(){
+          if (this.nowStep < 7) {
+            this.nowStep++
+          }
+        },
+        prevStep(){
+          if (this.nowStep > 1) {
+            this.nowStep--
+          }
+        },
+        inputFile: function (newFile, oldFile) {
+          if (newFile && oldFile && !newFile.active && oldFile.active) {
+            // Get response data
+            console.log('response', newFile.response)
+            if (newFile.xhr) {
+              //  Get the response status code
+              console.log('status', newFile.xhr.status)
+            }
+          }
+        },
+        inputFilter: function (newFile, oldFile, prevent) {
+          if (newFile && !oldFile) {
+            // Filter non-image file
+            if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
+              return prevent()
+            }
+          }
+          newFile.blob = ''
+          let URL = window.URL || window.webkitURL
+          if (URL && URL.createObjectURL) {
+            newFile.blob = URL.createObjectURL(newFile.file)
+          }
+        }
+      }
+    })
   </script>
 </body>
 </html>
