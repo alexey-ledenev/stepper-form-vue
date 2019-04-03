@@ -1,167 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
-    
+
   </style>
 </head>
+
 <body>
   <div id="app">
     <v-app>
       <v-content>
         <v-container>
-          <v-form
-            ref="form"
-            v-model="form"
-            py-1
-          >
-          <v-stepper v-model="nowStep">
-            <v-stepper-header>
-              <v-stepper-step :complete="nowStep > 1" step="1">Шаг 1</v-stepper-step>
+          <v-form ref="form" v-model="form" py-1>
+            <v-stepper v-model="nowStep">
+              <v-stepper-header>
+                <v-stepper-step :complete="nowStep > 1" step="1">Шаг 1</v-stepper-step>
 
-              <v-divider></v-divider>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 2" step="2">Шаг 2</v-stepper-step>
+                <v-stepper-step :complete="nowStep > 2" step="2">Шаг 2</v-stepper-step>
 
-              <v-divider></v-divider>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 3" step="3">Шаг 3</v-stepper-step>
-              <v-divider></v-divider>
+                <v-stepper-step :complete="nowStep > 3" step="3">Шаг 3</v-stepper-step>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 4" step="4">Шаг 4</v-stepper-step>
-              <v-divider></v-divider>
+                <v-stepper-step :complete="nowStep > 4" step="4">Шаг 4</v-stepper-step>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 5" step="5">Шаг 5</v-stepper-step>
-              <v-divider></v-divider>
+                <v-stepper-step :complete="nowStep > 5" step="5">Шаг 5</v-stepper-step>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 6" step="6">Шаг 6</v-stepper-step>
-              <v-divider></v-divider>
+                <v-stepper-step :complete="nowStep > 6" step="6">Шаг 6</v-stepper-step>
+                <v-divider></v-divider>
 
-              <v-stepper-step :complete="nowStep > 7" step="7">Финиш</v-stepper-step>
-            </v-stepper-header>
+                <v-stepper-step :complete="nowStep > 7" step="7">Финиш</v-stepper-step>
+              </v-stepper-header>
 
-            <v-stepper-items>
-              <v-stepper-content step="1">
-                <v-layout row wrap space-between class="white black--text">
-                  <v-flex xs12>
-                    <p class="headline">Укажите основные характеристики планируемого объекта:</p>
-                  </v-flex>
-                  <v-flex xs12><v-textarea outline counter="500" validate-on-blur auto-grow flat label="Назначение объекта" hint="Производственное, непроизводственное (общественное здание, жилое здание)"></v-textarea></v-flex>
-                  <v-flex xs6 pr-2><v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Площадь застройки"></v-text-field></v-flex>
-                  <v-flex xs6 pl-2><v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Общая площадь объекта"></v-text-field></v-flex>
-                  <v-flex xs12><v-text-field :rules="[rules.digit]" outline hint="тыс. руб." label="Сумма планируемых инвестиций"></v-text-field></v-flex>
-                  <v-flex xs12><v-textarea outline counter="10000" validate-on-blur auto-grow flat label="Необходимые мощности" hint="Необходимые для эксплуатации объекта мощности по газоснабжению, электроснабжению и водопотреблению"></v-textarea></v-flex>
-                </v-layout>
-              </v-stepper-content>
+              <v-stepper-items>
+                <v-stepper-content step="1">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Укажите основные характеристики планируемого объекта:</p>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="500" validate-on-blur auto-grow flat label="Назначение объекта"
+                        hint="Производственное, непроизводственное (общественное здание, жилое здание)"></v-textarea>
+                    </v-flex>
+                    <v-flex xs6 pr-2>
+                      <v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Площадь застройки">
+                      </v-text-field>
+                    </v-flex>
+                    <v-flex xs6 pl-2>
+                      <v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Общая площадь объекта">
+                      </v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field :rules="[rules.digit]" outline hint="тыс. руб."
+                        label="Сумма планируемых инвестиций"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="10000" validate-on-blur auto-grow flat label="Необходимые мощности"
+                        hint="Необходимые для эксплуатации объекта мощности по газоснабжению, электроснабжению и водопотреблению">
+                      </v-textarea>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
 
-              <v-stepper-content step="2">
-                <v-layout row wrap space-between class="white black--text">
-                  <v-flex xs12>
-                    <p class="headline">Определен земельный участок, на котором планируется строительство объекта?</p>
-                  </v-flex>
-                  <v-flex xs3>
-                    <v-radio-group v-model="land" :mandatory="false">
-                      <v-radio label="Да" value="yes"></v-radio>
-                      <v-radio label="Нет" value="no"></v-radio>
-                    </v-radio-group>
-                  </v-flex>
-                  <v-flex xs9 pl-2>
-                    <v-text-field 
-                      v-if="plotOfLand" 
-                      outline 
-                      label="Кадастровый номер земельного участка" 
-                      hint="В формате 00:00:0000000:0000" 
-                      mask="##:##:#######:####" 
-                      :rules="[rules.required, rules.length(15)]"
-                      counter="15"
-                      ></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-stepper-content>
+                <v-stepper-content step="2">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Определен земельный участок, на котором планируется строительство объекта?</p>
+                    </v-flex>
+                    <v-flex xs3>
+                      <v-radio-group v-model="formData.step2.landDefinition" :mandatory="false">
+                        <v-radio label="Да" value="yes"></v-radio>
+                        <v-radio label="Нет" value="no"></v-radio>
+                      </v-radio-group>
+                    </v-flex>
+                    <v-flex xs9 pl-2>
+                      <v-text-field v-if="landDef" outline label="Кадастровый номер земельного участка"
+                        hint="В формате 00:00:0000000:0000" mask="##:##:#######:####" :rules="[rules.length(15)]"
+                        counter="15"></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
 
-              <v-stepper-content step="3">
-                <v-layout row wrap space-between class="white black--text">
-                  <v-flex xs12>
-                    <p class="headline">Имеются ли у Вас правоустанавливающие документы на данный земельный участок (право аренды либо право собственности)?</p>
-                  </v-flex>
-                  <v-flex xs3>
-                    <v-radio-group v-model="landDocs" :mandatory="false">
-                      <v-radio label="Да" value="yes"></v-radio>
-                      <v-radio label="Нет" value="no"></v-radio>
-                    </v-radio-group>
-                  </v-flex>
-                  <v-flex xs9 pl-2>
-                    <div v-if="docsAttach">файлы</div>
-                    <v-select
-                    v-else
-                    :items="ownTypes"
-                    label="Укажите предпочитаемый вид права"
-                    :rules="[rules.required]"
-                  ></v-select>
-                  </v-flex>
-                </v-layout>
-              </v-stepper-content>
-              <v-stepper-content step="4">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
-              </v-stepper-content>
-              <v-stepper-content step="5">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
-              </v-stepper-content>
-              <v-stepper-content step="6">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
-              </v-stepper-content>
-              <v-stepper-content step="7">
-                <v-layout row wrap space-between class="white black--text">
-                  <v-flex xs12>
-                    <p class="headline">Укажите свои координаты: </p>
-                  </v-flex>
-                  <v-flex xs12><v-text-field outline counter="150" label="ФИО контактного лица" :rules="[rules.required, rules.length(3)]"></v-text-field></v-flex>
-                  <v-flex xs12><v-text-field outline label="Мобильный номер телефона" mask="phone" :rules="[rules.required, rules.length(10)]" counter="10"></v-text-field></v-flex>
-                  <v-flex xs12><v-text-field outline label="Электронная почта" type="email" :rules="[rules.email, rules.required, rules.length(3)]"></v-text-field></v-flex>
-                  <v-flex xs12><v-textarea outline counter="1000" rows="1" validate-on-blur auto-grow label="В какое время удобно Вам позвонить?"></v-textarea></v-flex>
-                </v-layout>
-              </v-stepper-content>
-            </v-stepper-items>
+                <v-stepper-content step="3">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Имеются ли у Вас правоустанавливающие документы на данный земельный участок
+                        (право аренды либо право собственности)?</p>
+                    </v-flex>
+                    <v-flex xs3>
+                      <v-radio-group v-model="formData.step3.landDocs" :mandatory="false">
+                        <v-radio label="Да" value="yes"></v-radio>
+                        <v-radio label="Нет" value="no"></v-radio>
+                      </v-radio-group>
+                    </v-flex>
+                    <v-flex xs9 pl-2>
+                      <div v-if="docsAttach">
+                        <v-text-field label="Приложите копию документа" @click='pickFile' v-model='formData.step3.fileNames'
+                          prepend-icon='attach_file' outline></v-text-field>
+                        <input type="file" multiple style="display: none" ref="image3" accept="image/*"
+                          @change="onFilePicked">
+                      </div>
+                      <v-select v-else outline :items="ownTypes" label="Укажите предпочитаемый вид права"
+                        :rules="[rules.required]"></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
+                <v-stepper-content step="4">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Укажите основные характеристики земельного участка, необходимого для
+                        строительства планируемого объекта:</p>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Ориентировочная площадь">
+                      </v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="10000" validate-on-blur auto-grow flat
+                        label="Территориальные предпочтения к месторасположению участка"></v-textarea>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="10000" validate-on-blur auto-grow flat
+                        label="Требования к логистике"></v-textarea>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-select outline :items="ownTypes" label="Укажите предпочитаемый вид права"></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
+                <v-stepper-content step="5">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Просим Вас указать причины обращения в Центр содействия строительству
+                        Белгородской области и кратко описать возникшие проблемы:</p>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="50000" validate-on-blur auto-grow></v-textarea>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
+                <v-stepper-content step="6">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Укажите данные организации: </p>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline counter="150" label="Наименование юридического лица"
+                        :rules="[rules.length(3)]"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline counter="150"
+                        label="ФИО руководителя или доверенного представителя организации" :rules="[rules.nonDigit]">
+                      </v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline label="ИНН организации" mask="############" :rules="[rules.length(12)]"
+                        counter="12"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline label="ОГРН организации " mask="###############" :rules="[rules.length(15)]"
+                        counter="15"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>файлы</v-flex>
+                  </v-layout>
+                </v-stepper-content>
+                <v-stepper-content step="7">
+                  <v-layout row wrap space-between class="white black--text">
+                    <v-flex xs12>
+                      <p class="headline">Укажите свои координаты: </p>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline counter="150" label="ФИО контактного лица"
+                        :rules="[rules.required, rules.length(3), rules.nonDigit]"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline label="Мобильный номер телефона" mask="phone"
+                        :rules="[rules.required, rules.length(10)]" counter="10"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field outline label="Электронная почта" type="email"
+                        :rules="[rules.email, rules.required, rules.length(3)]"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea outline counter="1000" rows="1" validate-on-blur auto-grow
+                        label="В какое время удобно Вам позвонить?"></v-textarea>
+                    </v-flex>
+                  </v-layout>
+                </v-stepper-content>
+              </v-stepper-items>
 
-            <div class="py-3 text-xs-right">
-                <v-btn
-                  color="primary"
-                  @click="nextStep"
-                  v-if="nowStep<7"
-                >
+              <div class="py-3 text-xs-right">
+                <v-btn color="primary" @click="nextStep" v-if="nowStep<7">
                   Далее
                 </v-btn>
-                <v-btn
-                  color="red"
-                  @click="nextStep"
-                  v-else
-                  dark
-                >
+                <v-btn color="red" @click="nextStep" v-else dark>
                   Отправить
                 </v-btn>
 
                 <v-btn v-if="nowStep>1" @click="prevStep">Назад</v-btn>
-            </div>
-          </v-stepper>
+              </div>
+            </v-stepper>
           </v-form>
         </v-container>
       </v-content>
@@ -170,77 +221,105 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
-  <script src="https://unpkg.com/vue-upload-component"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
   <script>
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     const digitRegex = /\d/
     Vue.use(Vuetify)
-    Vue.component('file-upload', VueUploadComponent)
-    const App = new Vue({ 
+    const App = new Vue({
       el: '#app',
-      data(){
+      data() {
         return {
           form: false,
+          formData: {
+            step1: {
+              objectAssignment: null,
+              buildArea: null,
+              objectArea: null,
+              amountOfInvestment: null,
+              necessaryPowers: null
+            },
+            step2: {
+              landDefinition: 'no'
+            },
+            step3: {
+              landDocs: 'no',
+              files: [],
+              fileNames: ''
+            },
+            step4: {},
+            step5: {},
+            step6: {},
+            step7: {}
+          },
           nowStep: 1,
-          land: 'no',
-          landDocs: 'no',
+          imageName: '',
           ownTypes: ['Аренда', 'Собственность'],
-          files: [],
           rules: {
             email: v => emailRegex.test(v) || 'Некорректный email',
             digit: v => digitRegex.test(v) || 'Введите число',
+            nonDigit: v => digitRegex.test(v) ? 'Поле должно содержать только текстовые символы' : true,
             length: len => v => (v || '').length >= len || `Количество символов должно быть не меньше ${len}`,
             required: v => !!v || 'Это поле обязательно для заполнения'
           }
         }
       },
-      components: {
-        FileUpload: VueUploadComponent
-      },
       computed: {
-        plotOfLand() {
-          return this.land === 'yes' ? true : false
+        landDef() {
+          return this.formData.step2.landDefinition === 'yes' ? true : false
         },
         docsAttach() {
-          return this.landDocs === 'yes' ? true : false
+          return this.formData.step3.landDocs === 'yes' ? true : false
         }
       },
       methods: {
-        nextStep(){
+        nextStep() {
           if (this.nowStep < 7) {
             this.nowStep++
-            if (this.nowStep == 3 && !this.plotOfLand) this.nowStep++
+            if (this.nowStep == 3 && !this.landDef) this.nowStep++
+            if (this.nowStep == 4 && !this.docsAttach) this.nowStep++
           }
         },
-        prevStep(){
+        prevStep() {
           if (this.nowStep > 1) {
             this.nowStep--
-            if (this.nowStep == 3 && !this.plotOfLand) this.nowStep--
+            if (this.nowStep == 3 && !this.landDef) this.nowStep--
+            if (this.nowStep == 4 && !this.docsAttach) this.nowStep--
           }
         },
-        inputFile: function (newFile, oldFile) {
-          if (newFile && oldFile && !newFile.active && oldFile.active) {
-            console.log('response', newFile.response)
-            if (newFile.xhr) {
-              console.log('status', newFile.xhr.status)
-            }
-          }
+        pickFile() {
+          this.$refs.image3.click()
         },
-        inputFilter: function (newFile, oldFile, prevent) {
-          if (newFile && !oldFile) {
-            if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
-              return prevent()
+        onFilePicked(e) {
+          const files = e.target.files
+          console.log(files)
+          if (files.length) {
+            const fr = new FileReader()
+            for (let i = 0; i < files.length; i++) {
+              const file = files[i]
+              if (file.size <= 52428800 && file.name > 0) {
+                this.formData.step3.fileNames += `${file.name} ,`
+              }
+              console.log(file)
             }
+          } else {
+            this.formData.step3.fileNames = ''
+            // this.imageFile = ''
+            // this.imageUrl = ''
           }
-          newFile.blob = ''
-          let URL = window.URL || window.webkitURL
-          if (URL && URL.createObjectURL) {
-            newFile.blob = URL.createObjectURL(newFile.file)
-          }
+
+          // if (files[0] !== undefined) {
+          //   const fr = new FileReader()
+          //   fr.readAsDataURL(files[0])
+          //   fr.addEventListener('load', () => {
+          //     this.imageUrl = fr.result
+          //     this.imageFile = files[0] // this is an image file that can be sent to server...
+          //   })
+          // } 
         }
       }
     })
   </script>
 </body>
+
 </html>
