@@ -108,7 +108,7 @@
                     </v-flex>
                     <v-flex xs9 pl-2>
                       <div v-if="docsAttach">
-                        <v-text-field label="Приложите копию документа" @click='pickFile' v-model='formData.step3.fileNames'
+                        <v-text-field label="Приложите копию документа" @click='pickFile' v-model='step3FileNames'
                           prepend-icon='attach_file' outline></v-text-field>
                         <input type="file" multiple style="display: none" ref="image3" accept="image/*"
                           @change="onFilePicked">
@@ -244,8 +244,7 @@
             },
             step3: {
               landDocs: 'no',
-              files: [],
-              fileNames: ''
+              files: []
             },
             step4: {},
             step5: {},
@@ -270,6 +269,9 @@
         },
         docsAttach() {
           return this.formData.step3.landDocs === 'yes' ? true : false
+        },
+        step3FileNames() {
+          return this.formData.step3.files.length > 0 ? this.formData.step3.files.map(file => file.name).join(', ') : ''
         }
       },
       methods: {
@@ -291,31 +293,10 @@
           this.$refs.image3.click()
         },
         onFilePicked(e) {
-          const files = e.target.files
-          console.log(files)
-          if (files.length) {
-            const fr = new FileReader()
-            for (let i = 0; i < files.length; i++) {
-              const file = files[i]
-              if (file.size <= 52428800 && file.name > 0) {
-                this.formData.step3.fileNames += `${file.name} ,`
-              }
-              console.log(file)
-            }
-          } else {
-            this.formData.step3.fileNames = ''
-            // this.imageFile = ''
-            // this.imageUrl = ''
+          const files = e.target.files || e.dataTransfer.files
+          if (files.length > 0) {
+            this.formData.step3.files = [...files].filter(file => (file.size <= 52428800 && file.name.lastIndexOf('.') > 0))
           }
-
-          // if (files[0] !== undefined) {
-          //   const fr = new FileReader()
-          //   fr.readAsDataURL(files[0])
-          //   fr.addEventListener('load', () => {
-          //     this.imageUrl = fr.result
-          //     this.imageFile = files[0] // this is an image file that can be sent to server...
-          //   })
-          // } 
         }
       }
     })
