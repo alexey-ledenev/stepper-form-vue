@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +8,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-  <style>
-
-  </style>
 </head>
-
 <body>
   <div id="app">
     <v-app>
       <v-content>
         <v-container>
-          <v-form ref="form" v-model="form" py-1>
+          <v-form ref="form" v-model="valid" py-1>
             <v-stepper v-model="nowStep">
               <v-stepper-header>
                 <v-stepper-step :complete="nowStep > 1" step="1">Шаг 1</v-stepper-step>
@@ -87,9 +82,9 @@
                       </v-radio-group>
                     </v-flex>
                     <v-flex xs9 pl-2>
-                      <v-text-field v-if="landDef" outline label="Кадастровый номер земельного участка"
-                        hint="В формате 00:00:0000000:0000" mask="##:##:#######:####" :rules="[rules.length(15)]"
-                        counter="15"></v-text-field>
+                      <v-text-field v-if="isStep2" outline label="Кадастровый номер земельного участка"
+                        hint="В формате 00:00:0000000:0000" mask="##:##:#######:####" :rules="[rules.lazyLength(15)]"
+                        counter="15" v-model="formData.step2.cadastralNumberOfLand"></v-text-field>
                     </v-flex>
                   </v-layout>
                 </v-stepper-content>
@@ -107,14 +102,14 @@
                       </v-radio-group>
                     </v-flex>
                     <v-flex xs9 pl-2>
-                      <div v-if="docsAttach">
-                        <v-text-field label="Приложите копию документа" @click='pickFile' v-model='step3FileNames'
-                          prepend-icon='attach_file' outline></v-text-field>
+                      <div v-if="isStep3">
+                        <v-text-field label="Приложите копию документа" @click='pickFile' v-model='formData.step3.fileName'
+                          prepend-icon='attach_file' outline id="image3"></v-text-field>
                         <input type="file" multiple style="display: none" ref="image3" accept="image/*"
-                          @change="onFilePicked">
+                          @change="onFilePicked" id="step3">
                       </div>
                       <v-select v-else outline :items="ownTypes" label="Укажите предпочитаемый вид права"
-                        :rules="[rules.required]"></v-select>
+                        v-model="formData.step3.ownType"></v-select>
                     </v-flex>
                   </v-layout>
                 </v-stepper-content>
@@ -125,19 +120,19 @@
                         строительства планируемого объекта:</p>
                     </v-flex>
                     <v-flex xs12>
-                      <v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Ориентировочная площадь">
+                      <v-text-field :rules="[rules.digit]" outline hint="кв. м" label="Ориентировочная площадь" v-model="formData.step4.area">
                       </v-text-field>
                     </v-flex>
                     <v-flex xs12>
                       <v-textarea outline counter="10000" validate-on-blur auto-grow flat
-                        label="Территориальные предпочтения к месторасположению участка"></v-textarea>
+                        label="Территориальные предпочтения к месторасположению участка" v-model="formData.step4.location"></v-textarea>
                     </v-flex>
                     <v-flex xs12>
                       <v-textarea outline counter="10000" validate-on-blur auto-grow flat
-                        label="Требования к логистике"></v-textarea>
+                        label="Требования к логистике" v-model="formData.step4.logistics"></v-textarea>
                     </v-flex>
                     <v-flex xs12>
-                      <v-select outline :items="ownTypes" label="Укажите предпочитаемый вид права"></v-select>
+                      <v-select outline :items="ownTypes" label="Укажите предпочитаемый вид права" v-model="formData.step4.ownType"></v-select>
                     </v-flex>
                   </v-layout>
                 </v-stepper-content>
@@ -148,7 +143,7 @@
                         Белгородской области и кратко описать возникшие проблемы:</p>
                     </v-flex>
                     <v-flex xs12>
-                      <v-textarea outline counter="50000" validate-on-blur auto-grow></v-textarea>
+                      <v-textarea outline counter="50000" validate-on-blur auto-grow v-model="formData.step5.petitionReason"></v-textarea>
                     </v-flex>
                   </v-layout>
                 </v-stepper-content>
@@ -159,22 +154,27 @@
                     </v-flex>
                     <v-flex xs12>
                       <v-text-field outline counter="150" label="Наименование юридического лица"
-                        :rules="[rules.length(3)]"></v-text-field>
+                        :rules="[rules.lazyLength(3)]" v-model="formData.step6.nameOfTheLegalEntity"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                      <v-text-field outline counter="150"
+                      <v-text-field outline counter="150" v-model="formData.step6.managerFullName"
                         label="ФИО руководителя или доверенного представителя организации" :rules="[rules.nonDigit]">
                       </v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                      <v-text-field outline label="ИНН организации" mask="############" :rules="[rules.length(12)]"
-                        counter="12"></v-text-field>
+                      <v-text-field outline label="ИНН организации" mask="############" :rules="[rules.lazyLength(12)]"
+                        counter="12" v-model="formData.step6.inn"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                      <v-text-field outline label="ОГРН организации " mask="###############" :rules="[rules.length(15)]"
-                        counter="15"></v-text-field>
+                      <v-text-field outline label="ОГРН организации " mask="###############" :rules="[rules.lazyLength(15)]"
+                        counter="15" v-model="formData.step6.ogrn"></v-text-field>
                     </v-flex>
-                    <v-flex xs12>файлы</v-flex>
+                    <v-flex xs12>
+                      <v-text-field label="Прикрепите копию выписки из ЕГРЮЛ/ЕГРИП" @click='pickFile' v-model='formData.step6.fileName'
+                      prepend-icon='attach_file' outline id="image6"></v-text-field>
+                    <input type="file" multiple style="display: none" ref="image6" accept="image/*"
+                      @change="onFilePicked" id="step6">
+                    </v-flex>
                   </v-layout>
                 </v-stepper-content>
                 <v-stepper-content step="7">
@@ -184,34 +184,36 @@
                     </v-flex>
                     <v-flex xs12>
                       <v-text-field outline counter="150" label="ФИО контактного лица"
-                        :rules="[rules.required, rules.length(3), rules.nonDigit]"></v-text-field>
+                        :rules="[rules.required, rules.length(3), rules.nonDigit]" v-model="formData.step7.fullName"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                       <v-text-field outline label="Мобильный номер телефона" mask="phone"
-                        :rules="[rules.required, rules.length(10)]" counter="10"></v-text-field>
+                        :rules="[rules.required, rules.length(10)]" counter="10" v-model="formData.step7.phone"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                       <v-text-field outline label="Электронная почта" type="email"
-                        :rules="[rules.email, rules.required, rules.length(3)]"></v-text-field>
+                        :rules="[rules.email, rules.required, rules.length(3)]" v-model="formData.step7.email"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                       <v-textarea outline counter="1000" rows="1" validate-on-blur auto-grow
-                        label="В какое время удобно Вам позвонить?"></v-textarea>
+                        label="В какое время удобно Вам позвонить?" v-model="formData.step7.timeToCall"></v-textarea>
                     </v-flex>
                   </v-layout>
                 </v-stepper-content>
               </v-stepper-items>
 
-              <div class="py-3 text-xs-right">
-                <v-btn color="primary" @click="nextStep" v-if="nowStep<7">
-                  Далее
-                </v-btn>
-                <v-btn color="red" @click="nextStep" v-else dark>
-                  Отправить
-                </v-btn>
-
-                <v-btn v-if="nowStep>1" @click="prevStep">Назад</v-btn>
-              </div>
+              <v-layout class="py-3">
+                <v-flex><v-btn v-if="nowStep>1" @click="prevStep">Назад</v-btn></v-flex>
+                <v-spacer></v-spacer>
+                <v-flex xs2 text-xs-right>
+                  <v-btn color="primary" @click="nextStep" v-if="nowStep<7">
+                    Далее
+                  </v-btn>
+                  <v-btn color="red" @click.prevent="onSubmit" v-else dark>
+                    Отправить
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-stepper>
           </v-form>
         </v-container>
@@ -222,6 +224,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js"></script>
   <script>
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     const digitRegex = /\d/
@@ -230,7 +233,7 @@
       el: '#app',
       data() {
         return {
-          form: false,
+          valid: false,
           formData: {
             step1: {
               objectAssignment: null,
@@ -240,62 +243,104 @@
               necessaryPowers: null
             },
             step2: {
-              landDefinition: 'no'
+              landDefinition: 'no',
+              cadastralNumberOfLand: null
             },
             step3: {
               landDocs: 'no',
-              files: []
+              files: [],
+              fileName: '',
+              ownType: null
             },
-            step4: {},
-            step5: {},
-            step6: {},
-            step7: {}
+            step4: {
+              area: null,
+              location: null,
+              logistics: null,
+              ownType: null
+            },
+            step5: {
+              petitionReason: null
+            },
+            step6: {
+              nameOfTheLegalEntity: null,
+              managerFullName: null,
+              inn: null,
+              ogrn: null,
+              files: [],
+              fileName: ''
+            },
+            step7: {
+              fullName: null,
+              phone: null,
+              email: null,
+              timeToCall: null
+            }
           },
           nowStep: 1,
           imageName: '',
           ownTypes: ['Аренда', 'Собственность'],
           rules: {
             email: v => emailRegex.test(v) || 'Некорректный email',
-            digit: v => digitRegex.test(v) || 'Введите число',
+            digit: v => v ? digitRegex.test(v) : true || 'Введите число',
             nonDigit: v => digitRegex.test(v) ? 'Поле должно содержать только текстовые символы' : true,
             length: len => v => (v || '').length >= len || `Количество символов должно быть не меньше ${len}`,
+            lazyLength: len => v => v ? v.length >= len : true || `Количество символов должно быть не меньше ${len}`,
             required: v => !!v || 'Это поле обязательно для заполнения'
           }
         }
       },
       computed: {
-        landDef() {
+        isStep2() {
           return this.formData.step2.landDefinition === 'yes' ? true : false
         },
-        docsAttach() {
+        isStep3() {
           return this.formData.step3.landDocs === 'yes' ? true : false
-        },
-        step3FileNames() {
-          return this.formData.step3.files.length > 0 ? this.formData.step3.files.map(file => file.name).join(', ') : ''
         }
       },
       methods: {
         nextStep() {
           if (this.nowStep < 7) {
             this.nowStep++
-            if (this.nowStep == 3 && !this.landDef) this.nowStep++
-            if (this.nowStep == 4 && !this.docsAttach) this.nowStep++
+            if (this.nowStep == 3 && !this.isStep2) this.nowStep++
+            if (this.nowStep == 4 && !this.isStep3) this.nowStep++
           }
         },
         prevStep() {
           if (this.nowStep > 1) {
             this.nowStep--
-            if (this.nowStep == 3 && !this.landDef) this.nowStep--
-            if (this.nowStep == 4 && !this.docsAttach) this.nowStep--
+            if (this.nowStep == 3 && !this.isStep2) this.nowStep--
+            if (this.nowStep == 4 && !this.isStep3) this.nowStep--
           }
         },
-        pickFile() {
-          this.$refs.image3.click()
+        pickFile(e) {
+          const el = e.target.id
+          this.$refs[el].click()
         },
         onFilePicked(e) {
           const files = e.target.files || e.dataTransfer.files
+          const step = e.target.id
           if (files.length > 0) {
-            this.formData.step3.files = [...files].filter(file => (file.size <= 52428800 && file.name.lastIndexOf('.') > 0))
+            this.formData[step].files = [...files].filter(file => (file.size <= 52428800 && file.name.lastIndexOf('.') > 0))
+            this.formData[step].fileName = this.formData[step].files.map(file => file.name).join(', ')
+          } else {
+            this.formData[step].fileName = ''
+          }
+        },
+        onSubmit() {
+          if (this.$refs.form.validate()) {
+            const filename = "form.xlsx";
+            const ws_name = "UserData";
+            const data = []
+            for (let key in this.formData) {
+              const stepData = [key]
+              for (let k in this.formData[key]) {
+                if (this.formData[key][k] && k != 'files' && k != 'fileName') stepData.push(this.formData[key][k])
+              }
+              data.push(stepData)
+            }
+            const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+            XLSX.writeFile(wb, filename);
           }
         }
       }
