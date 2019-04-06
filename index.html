@@ -544,16 +544,16 @@
             const finalFormData = new FormData()
             finalFormData.append('file', 'form.xlsx')
             finalFormData.append('data', wbout)
-            if ((this.formData.step3.files || []).length>0) {
-              this.formData.step3.files.forEach(file => {
-                finalFormData.append('data', file, file.name)
+            const fileToFormData = (steps) => {
+              (steps || []).forEach(s => {
+                if ((this.formData[s].files || []).length>0) {
+                  this.formData[s].files.forEach(file => {
+                    finalFormData.append('data', file, file.name)
+                  })
+                }
               })
             }
-            if ((this.formData.step6.files || []).length>0) {
-              this.formData.step6.files.forEach(file => {
-                finalFormData.append('data', file, file.name)
-              })
-            }
+            fileToFormData(['step3', 'step6'])
             const req = new XMLHttpRequest()
             req.open("POST", "/", true)
             req.send(finalFormData)
