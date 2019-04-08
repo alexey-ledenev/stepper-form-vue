@@ -13,7 +13,7 @@
   <div id="app">
     <v-app>
       <v-content>
-        <v-container>
+        <v-container v-if="!loading">
           <v-form ref="form" v-model="valid" py-1>
             <v-stepper v-model="nowStep">
               <v-stepper-header>
@@ -57,7 +57,7 @@
                         v-model="formData.step1.objectAssignment">
                       </v-textarea>
                     </v-flex>
-                    <v-flex xs6 pr-2>
+                    <v-flex xs12 lg5>
                       <v-text-field 
                         :rules="[rules.digit]" 
                         outline flat
@@ -67,7 +67,8 @@
                         v-model="formData.step1.buildArea">
                       </v-text-field>
                     </v-flex>
-                    <v-flex xs6 pl-2>
+                    <v-spacer></v-spacer>
+                    <v-flex xs12 lg5>
                       <v-text-field 
                         :rules="[rules.digit]" 
                         outline flat
@@ -102,17 +103,17 @@
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
-                  <v-layout row wrap space-between class="white black--text">
+                  <v-layout row wrap space-between class="white black--text" mx-3>
                     <v-flex xs12>
                       <p class="headline">{{questions.step2.landDefinition[0]}}</p>
                     </v-flex>
-                    <v-flex xs3>
-                      <v-radio-group v-model="formData.step2.landDefinition" flat :mandatory="false">
+                    <v-flex xs12 md3>
+                      <v-radio-group v-model="formData.step2.landDefinition" :mandatory="false">
                         <v-radio label="Да" value="yes"></v-radio>
                         <v-radio label="Нет" value="no"></v-radio>
                       </v-radio-group>
                     </v-flex>
-                    <v-flex xs9 pl-2>
+                    <v-flex xs12 md9 pl-2>
                       <v-text-field 
                         v-if="isStep2" 
                         outline flat
@@ -129,17 +130,17 @@
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
-                  <v-layout row wrap space-between class="white black--text">
+                  <v-layout row wrap space-between class="white black--text" mx-3>
                     <v-flex xs12>
                       <p class="headline">{{questions.step3.landDocs[0]}}</p>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs12 md3 px-1>
                       <v-radio-group v-model="formData.step3.landDocs" :mandatory="false">
                         <v-radio label="Да" value="yes"></v-radio>
                         <v-radio label="Нет" value="no"></v-radio>
                       </v-radio-group>
                     </v-flex>
-                    <v-flex xs9 pl-2>
+                    <v-flex xs12 md9 pl-2>
                       <div v-if="isStep3">
                         <v-text-field 
                           outline flat
@@ -148,7 +149,8 @@
                           hint="размером до 50МБ" 
                           @click='pickFile' 
                           v-model='formData.step3.fileName'
-                          id="image3">
+                          id="image3"
+                          readonly>
                         </v-text-field>
                         <input 
                           type="file" 
@@ -289,6 +291,7 @@
                         @click='pickFile' 
                         v-model='formData.step6.fileName'
                         id="image6"
+                        readonly
                       ></v-text-field>
                       <input 
                         type="file" 
@@ -357,7 +360,7 @@
               <v-layout class="py-3">
                 <v-flex><v-btn v-if="nowStep>1" @click="prevStep">Назад</v-btn></v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs2 text-xs-right>
+                <v-flex text-xs-right>
                   <v-btn color="primary" @click="nextStep" v-if="nowStep<7">
                     Далее
                   </v-btn>
@@ -368,6 +371,28 @@
               </v-layout>
             </v-stepper>
           </v-form>
+        </v-container>
+        <v-container v-else>
+            <v-dialog
+            v-model="loading"
+            hide-overlay
+            persistent
+            width="300"
+          >
+            <v-card
+              color="primary"
+              dark
+            >
+              <v-card-text>
+                Загрузка формы 
+                <v-progress-linear
+                  indeterminate
+                  color="white"
+                  class="mb-0"
+                ></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
         </v-container>
       </v-content>
     </v-app>
@@ -385,6 +410,7 @@
       el: '#app',
       data() {
         return {
+          loading: true,
           valid: false,
           formData: {
             step1: {
@@ -489,6 +515,10 @@
           }
         }
       },
+      mounted: function () {
+        if (this.loading)
+          setTimeout(() => (this.loading = false), 2000)
+      },
       computed: {
         isStep2() {
           return this.formData.step2.landDefinition === 'yes' ? true : false
@@ -533,8 +563,8 @@
             const data = []
             for (let key in this.formData) {
               for (let k in this.formData[key]) {
-                if (this.formData[key][k] && k != 'files') 
-                  data.push([this.questions[key][k], this.formData[key][k]])
+                if (k != 'files') 
+                  data.push([this.questions[key][k][0], this.formData[key][k]])
               }
             }
             const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(data)
